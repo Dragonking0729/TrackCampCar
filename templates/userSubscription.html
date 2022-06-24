@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}  
+{% load replace %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/myaccount.css' %}">
+<div class="container mt-5 mb-5">
+    <div class="col-sm-12 text-center">
+        <h3 class="page-heading">Abonnement Rechnungen</h3>
+        <div class="horizontal-break"></div>
+    </div>
+    <div class="row">
+        <div class="myaccount-wizard">
+            <div class='row'>
+                <div class="col-sm-3">
+                    <ul class="account-menu">
+                        <li>
+                            <a href="/Myaccount">Übersicht</a>
+                        </li>
+                        <li>
+                            <a href="/Usersubscription/detail">Abonnement Rechnungen</a>
+                        </li>
+                        <li class='active'>
+                            <a href="/Usersubscription">Abonnement</a>
+                        </li>
+                        <li>
+                            <a href="/Uservehicles">Meine Fahrzeuge</a>
+                        </li>
+                        <li>
+                            <a href="/Userorders">Bestellungen</a>
+                        </li>
+                        <li>
+                            <a href="/Userforms">Formulare</a>
+                        </li>
+                        <li>
+                            <a href="/Userchangepassword">Passwort ändern</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/Logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+                <input name="csrfmiddlewaretoken" type="hidden" value="{{ csrf_token }}" id='csrf_token'>
+                <div class="col-sm-9">
+                    <div class='row subscription-table'>
+                        {% for package in packagelist %}
+                        <div class="col-sm-3 pb-2">
+                            <ul class="price">
+                                <li class="header">{{ package.packagename }} </li>
+                                <li class="grey">{{ package.Annualpricepervehicle}} € pro Jahr</li>
+                                <li>{{ package.Activationfeeoncepervehicle }} € pro Fahrzeug</li>
+                                <li class="grey">{% if current_subscription.Subscriptionpcakage|to_int  == package.ID %}<button href="#" class="button">Current</button>{% elif current_subscription.Sortorder < package.Sortorder %}<button href="{{ package.ID }}" class="button upgrade-link">Upgrade</button>{% else %}<button href="{{ package.ID }}" class="button upgrade-link">Downgrade</button>{% endif %}</li>
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>Informationen!</strong> <br>
+                        Keine Daten.
+                    </div>
+                    Sie können noch 5 Fahrzeuge hinzufügen, Fur mehr als 5 Fahrzeuge wenden Sie sich bitte an Kundenservice. (jedes weitere Fahrzeug ab 3,80 € im Jahr zzgl. 4,99 € monatlich fur die Mobilfunkkarte pro Fahrzeug) 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/myaccount.js' %}"></script>
+    <script src="{% static 'js/userSubscription.js' %}"></script>
+{% endblock %}

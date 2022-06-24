@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+    {% include 'admin/header.html' %}
+    <!-- Page content -->
+	<div class="page-content">
+        {% if url != "login" %}
+        {% include 'admin/sidebar.html' %}
+        {% endif %}
+        <div class="content-wrapper">
+            {% block content %}
+            {% endblock %}
+            {% include  'admin/footer.html' %}
+        </div>
+    </div>
+    {% block script %}
+    {% endblock %}
+</body>
+</html>

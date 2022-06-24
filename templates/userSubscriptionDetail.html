@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}  
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/myaccount.css' %}">
+<div class="container mt-5 mb-5">
+    <div class="col-sm-12 text-center">
+        <h3 class="page-heading">Abonnement Rechnungen</h3>
+        <div class="horizontal-break"></div>
+    </div>
+    <div class="row">
+        <div class="myaccount-wizard">
+            <div class='row'>
+                <div class="col-sm-3">
+                    <ul class="account-menu">
+                        <li>
+                            <a href="/Myaccount">Übersicht</a>
+                        </li>
+                        <li class='active'>
+                            <a href="/Usersubscription/detail">Abonnement Rechnungen</a>
+                        </li>
+                        <li>
+                            <a href="/Usersubscription">Abonnement</a>
+                        </li>
+                        <li>
+                            <a href="/Uservehicles">Meine Fahrzeuge</a>
+                        </li>
+                        <li>
+                            <a href="/Userorders">Bestellungen</a>
+                        </li>
+                        <li>
+                            <a href="/Userforms">Formulare</a>
+                        </li>
+                        <li>
+                            <a href="/Userchangepassword">Passwort ändern</a>
+                        </li>
+                        <li>
+                            <a href="/Admin/Logout">Logout</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-9">
+                    <table class="table table-responsive">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Kundendaten
+                                </th>
+                                <th>
+                                    Abonnement Paket
+                                </th>
+                                <th>
+                                    Rechnungsdatum
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in subscription_list %}
+                            <tr>
+                                <td>
+                                    <i class="fas fa-user mr-1"></i>{{ item.Firstname }} {{ item.Lastname }}<br>
+                                    <i class="fas fa-envelope mr-1"></i>{{ item.Email }}
+                                </td>
+                                <td>
+                                    {% if item.Note is None %} <strong>Abonnement:</strong> {{ item.packagename }} {% else %} {{ item.Note }} ({{ item.packagename }}) {% endif %}<br>
+                                    <strong>Zahlungsintervall:</strong>
+                                    {% if item.PaymentInterval == '1' %}1 Monat
+                                    {% elif item.PaymentInterval == '2' %}3 Monate
+                                    {% elif item.PaymentInterval == '3' %}6 Monate
+                                    {% elif item.PaymentInterval == '4' %}1 Jahr
+                                    {% else %}2 Jahre{% endif %}<br>
+                                    <strong>Zahlungsbetrag:</strong>{{ item.Paymentammount }} €<br>
+                                </td>
+                                <td>
+                                    {{ item.Paymentdate }}
+                                </td>
+                                <td>
+                                    <a href="/Invoice/subscription/{{ item.Id }}" class="btn btn-warning" target="_blank"> Rechnung </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% for item in order_list %}
+                            {% if item.Id is not Noun %}
+                            <tr>
+                                <td>
+                                    <i class="fas fa-user mr-1"></i>{{ item.Firstname }} {{ item.Lastname }}<br>
+                                    <i class="fas fa-envelope mr-1"></i>{{ item.Email }}
+                                </td>
+                                <td>
+                                    {{ item.Trackername }}<br>
+                                    <strong>Preis:</strong>{{ item.DicountPrice }} €<br>
+                                    <strong>Einmalige Aktivierungsgebühr:</strong>{{ item.activation_price }} €<br>
+                                </td>
+                                <td>
+                                    {{ item.OrderDate }}
+                                </td>
+                                <td>
+                                    <a href="/Invoice/tracker/{{ item.OrderId }}" class="btn btn-warning" target="_blank"> Rechnung </a>
+                                </td>
+                            </tr>    
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static 'js/myaccount.js' %}"></script>
+{% endblock %}
